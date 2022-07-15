@@ -1,0 +1,117 @@
+@mixin sagum($color,$clip-path:polygon(0 0, 100% 0, 100% 100%, 0% 100%))  //шторка 
+{
+    position: relative;
+    & > *
+    {
+        position: relative;
+    }
+        &:before{
+            content: "";
+    position: absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    background-color: $color;
+    z-index: -10;
+    clip-path: $clip-path;
+    }
+}  // конце шторки
+
+
+@mixin button($width, $height,$color:#fff,$bgcolor:'none', $border-radius:0,$size:100%) //кнопка 
+{
+   display: inline-block;
+    text-align: center;
+    width:$width;
+    line-height: $height;
+    background-color: $bgcolor;
+    color:$color;
+    cursor:pointer;
+    border-radius:$border-radius;
+   font-size:$size;
+   user-select: none;
+   overflow: hidden;
+    @media (max-width:480px)
+    {
+        width:($width / 100) * 80;
+        line-height: ($height/ 100) * 80;
+        font-size:($size/ 100) * 80;
+    }
+} //конец кнопки
+
+
+
+@mixin fsize($screen-width,$font-size) //адаптивны шрифт 
+{
+    $fmin:($font-size / 2);
+   $fplus:($font-size - $fmin)/1px;
+    $screen-width: $screen-width /1px ; 
+  font-size:calc( #{$fmin } + #{$fplus} * (100vw / #{$screen-width}));  
+   @media (min-width:#{$screen-width * 1px})
+   {
+       font-size:#{$font-size };
+   }
+} // конец адаптивного шрифта
+
+
+@mixin font($family:false,$size:false,$weight:false,$color:false,$line-height:false,$screen:1500px) //полный шрифт
+{
+   @if $family
+   {
+       font-family: $family;
+   }
+   @if $weight
+   {
+       font-weight: $weight;
+   }
+   @if $size
+   {
+       @include fsize($screen,$size);
+   }
+   @if $color
+   {
+        color: $color;
+   }
+   @if $line-height
+   {
+        line-height: ($line-height / $size ) *100%;
+   }
+} //конец полных шрифта
+
+@mixin container($width,$top:0, $bottom:0) //контейнер
+{
+    max-width:$width;
+    margin:auto;
+    padding:#{$top} 10px #{$bottom} 10px ;
+    @media(max-width:768px)
+    {
+        @if #{$top }>70{
+        padding-top:$top  / 3;
+        }
+        @if #{$bottom}>70{
+            padding-bottom:$bottom  / 3;
+            }
+    }
+}//конец контейнера
+
+@mixin margin($all, $ex_parte) //отступы
+{
+    margin: 0px $all 0px $all;
+    &:first-child
+    {
+        margin-left:$ex_parte
+    }
+    &:last-child
+    {
+        margin-right:$ex_parte
+    }
+} // конец отступы
+
+@mixin placeholder {
+    &::-webkit-input-placeholder { @content; }
+    &:-moz-placeholder           { @content; }
+    &::-moz-placeholder          { @content; }
+    &:-ms-input-placeholder      { @content; }  
+    & textarea::placeholder  { @content; } 
+  }
